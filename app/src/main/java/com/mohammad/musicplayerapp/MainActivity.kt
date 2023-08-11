@@ -24,48 +24,38 @@ class MainActivity : AppCompatActivity() {
 
     // Media Player
     var mediaPlayer = MediaPlayer()
-    lateinit var time_txt: TextView
     lateinit var seekBar: SeekBar
-    var songTitle:TextView=findViewById(R.id.song_title)
-    var time_left:TextView=findViewById(R.id.time_left_text)
-    var seekbar:SeekBar=findViewById(R.id.seek_bar)
-    var playBtn:Button= findViewById(R.id.play_btn)
+    lateinit var time_txt: TextView
+
+    // on create method
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val play_btn : Button = findViewById(R.id.play_btn)
-        val stop_btn : Button = findViewById(R.id.puse)
-        val forward_btn: Button = findViewById(R.id.fast_forward)
-        val back_btn : Button = findViewById(R.id.back_btn)
-
-        val title_txt : TextView = findViewById(R.id.song_title)
-        time_txt  =findViewById(R.id.time_left_text)
-
-        seekBar  = findViewById(R.id.seek_bar)
-
-
+        val play_btn: Button = findViewById(R.id.play_btn)
+        val stop_btn: Button = findViewById(R.id.pause_btn)
+        val forward_btn: Button = findViewById(R.id.forward_btn)
+        val back_btn: Button = findViewById(R.id.back_btn)
+        val title_txt: TextView = findViewById(R.id.song_title)
+        time_txt = findViewById(R.id.time_left_text)
+        seekBar = findViewById(R.id.seek_bar)
 
         // Media Player
         mediaPlayer = MediaPlayer.create(
             this,
             R.raw.astronaut
         )
-
         seekBar.isClickable = false
 
 
-
-
-
         // Adding Functionalities for the buttons
-        play_btn.setOnClickListener(){
+        play_btn.setOnClickListener() {
             mediaPlayer.start()
 
             finalTime = mediaPlayer.duration.toDouble()
             startTime = mediaPlayer.currentPosition.toDouble()
 
-            if (oneTimeOnly == 0){
+            if (oneTimeOnly == 0) {
                 seekBar.max = finalTime.toInt()
                 oneTimeOnly = 1
             }
@@ -78,45 +68,43 @@ class MainActivity : AppCompatActivity() {
 
 
         // Setting the music title
-        title_txt.text = ""+ resources.getResourceEntryName(R.raw.astronaut)
+        title_txt.text = "" + resources.getResourceEntryName(R.raw.astronaut)
 
 
         // Stop Button
-        stop_btn.setOnClickListener(){
+        stop_btn.setOnClickListener() {
             mediaPlayer.pause()
         }
 
 
         // Forward Button
-        forward_btn.setOnClickListener(){
+        forward_btn.setOnClickListener() {
             var temp = startTime
-            if ((temp + forwardTime) <= finalTime){
+            if ((temp + forwardTime) <= finalTime) {
                 startTime = startTime + forwardTime
                 mediaPlayer.seekTo(startTime.toInt())
-            }else{
-                Toast.makeText(this,
-                    "Can't Jump forward", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Can't Jump forward", Toast.LENGTH_LONG
+                ).show()
             }
         }
 
-        back_btn.setOnClickListener(){
+        back_btn.setOnClickListener() {
             var temp = startTime.toInt()
 
-            if ((temp - backwardTime) >0){
+            if ((temp - backwardTime) > 0) {
                 startTime = startTime - backwardTime
                 mediaPlayer.seekTo(startTime.toInt())
-            }else{
-                Toast.makeText(this,
+            } else {
+                Toast.makeText(
+                    this,
                     "Can't Jump backward",
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
-
-
-
-
-
-
     }
 
     // Creating the Runnable
@@ -133,9 +121,9 @@ class MainActivity : AppCompatActivity() {
                                 TimeUnit.MILLISECONDS.toMinutes(
                                     startTime.toLong()
                                 )
-                            ))
+                            )
+                        )
                     )
-
 
             seekBar.progress = startTime.toInt()
             handler.postDelayed(this, 100)
